@@ -61,6 +61,7 @@ egui = { version = "0.18.0", path = "../egui", default-features = false, feature
   "tracing",
 ] }
 tracing = "0.1"
+winapi = "0.3.9"
 
 # optional:
 egui_glow = { version = "0.18.0", path = "../egui_glow", optional = true, default-features = false }

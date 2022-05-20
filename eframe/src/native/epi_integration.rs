@@ -1,5 +1,10 @@
 use crate::{epi, WindowInfo};
 use egui_winit::{native_pixels_per_point, WindowSettings};
+use winapi::{
+    shared::windef::{HWND, HWND__},
+    um::winuser,
+};
+use winit::window::WindowId;
 
 pub fn points_to_size(points: egui::Vec2) -> winit::dpi::LogicalSize<f64> {
     winit::dpi::LogicalSize {
@@ -313,7 +318,18 @@ impl EpiIntegration {
         if let Some(storage) = self.frame.storage_mut() {
             crate::profile_function!();
 
-            if _app.persist_native_window() {
+            // Don't save minimized window position values on Windows OS.
+            let mut can_save_window_position = true;
+            if cfg!(windows) {
+                unsafe {
+                    let window_HWND = std::mem::transmute::<WindowId, HWND>(_window.id());
+                    if !window_HWND.is_null() && winuser::IsIconic(window_HWND) != 0 {
+                        can_save_window_position = false;
+                    }
+                }
+            }
+
+            if _app.persist_native_window() && can_save_window_position {
                 crate::profile_scope!("native_window");
                 epi::set_value(
                     storage,

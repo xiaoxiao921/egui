@@ -1144,6 +1144,7 @@ dependencies = [
  "wasm-bindgen",
  "wasm-bindgen-futures",
  "web-sys",
+ "winapi",
  "winit",
 ]
 
@@ -1184,6 +1185,7 @@ dependencies = [
  "tracing",
  "tts",
  "webbrowser",
+ "winapi",
  "winit",
 ]
 
