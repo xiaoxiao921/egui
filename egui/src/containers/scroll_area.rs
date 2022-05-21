@@ -650,6 +650,7 @@ impl Prepared {
                 if has_bar[d] {
                     let mut frame_state = ui.ctx().frame_state();
                     let scroll_delta = frame_state.scroll_delta;
+                    println!("test");
 
                     let scrolling_up = state.offset[d] > 0.0 && scroll_delta[d] > 0.0;
                     let scrolling_down = state.offset[d] < max_offset[d] && scroll_delta[d] < 0.0;
