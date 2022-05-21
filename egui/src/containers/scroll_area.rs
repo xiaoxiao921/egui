@@ -644,7 +644,8 @@ impl Prepared {
         }
 
         let max_offset = content_size - inner_rect.size();
-        if scrolling_enabled && ui.rect_contains_pointer(outer_rect) {
+        // if scrolling_enabled && ui.rect_contains_pointer(outer_rect) {
+        if scrolling_enabled {
             for d in 0..2 {
                 if has_bar[d] {
                     let mut frame_state = ui.ctx().frame_state();
