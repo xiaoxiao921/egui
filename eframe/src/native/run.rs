@@ -63,8 +63,8 @@ pub fn run_glow(
                 centered_pos.width /= 2.;
                 println!("scale factor : {:?}", ele.scale_factor());
                 println!("1: {:?}", centered_pos);
-                centered_pos.width -= native_options.initial_window_size.unwrap().x;
-                centered_pos.height -= native_options.initial_window_size.unwrap().y;
+                centered_pos.width -= native_options.initial_window_size.unwrap().x / 2.;
+                centered_pos.height -= native_options.initial_window_size.unwrap().y / 2.;
                 println!("2: {:?}", centered_pos);
                 native_options.initial_window_pos = Some(Pos2 {
                     x: centered_pos.width,
