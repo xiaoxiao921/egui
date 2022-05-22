@@ -48,10 +48,16 @@ pub fn run_glow(
     let window_settings = epi_integration::load_window_settings(storage.as_deref());
     let event_loop = winit::event_loop::EventLoop::with_user_event();
 
-    if native_options.initial_window_pos_centered {
+    if window_settings.is_none() && native_options.initial_window_pos_centered {
         for ele in event_loop.available_monitors() {
-            native_options.initial_window_pos =
-                ele.size() / 2. - native_options.initial_window_size;
+            let mut monitor_center = ele.size();
+            monitor_center.height /= 2.;
+            monitor_center.width /= 2.;
+            if native_options.initial_window_pos.is_some() {
+                monitor_center.width -= native_options.initial_window_pos.unwrap().x;
+                monitor_center.height -= native_options.initial_window_pos.unwrap().y;
+            }
+            native_options.initial_window_pos = monitor_center;
             break;
         }
     }
@@ -213,10 +219,16 @@ pub fn run_wgpu(
     let window_settings = epi_integration::load_window_settings(storage.as_deref());
     let event_loop = winit::event_loop::EventLoop::with_user_event();
 
-    if native_options.initial_window_pos_centered {
+    if window_settings.is_none() && native_options.initial_window_pos_centered {
         for ele in event_loop.available_monitors() {
-            native_options.initial_window_pos =
-                ele.size() / 2. - native_options.initial_window_size;
+            let mut monitor_center = ele.size();
+            monitor_center.height /= 2.;
+            monitor_center.width /= 2.;
+            if native_options.initial_window_pos.is_some() {
+                monitor_center.width -= native_options.initial_window_pos.unwrap().x;
+                monitor_center.height -= native_options.initial_window_pos.unwrap().y;
+            }
+            native_options.initial_window_pos = monitor_center;
             break;
         }
     }
