@@ -56,18 +56,18 @@ pub fn run_glow(
         }
 
         for ele in event_loop.available_monitors() {
-            let mut centered_pos = ele.size();
+            let centered_pos = ele.size().to_logical::<f32>(ele.scale_factor());
             let is_not_web = centered_pos.width != 0 && centered_pos.height != 0;
             if is_not_web {
-                centered_pos.height /= 2;
-                centered_pos.width /= 2;
+                centered_pos.height /= 2.;
+                centered_pos.width /= 2.;
                 println!("1: {:?}", centered_pos);
-                centered_pos.width -= native_options.initial_window_size.unwrap().x as u32;
-                centered_pos.height -= native_options.initial_window_size.unwrap().y as u32;
+                centered_pos.width -= native_options.initial_window_size.unwrap().x;
+                centered_pos.height -= native_options.initial_window_size.unwrap().y;
                 println!("2: {:?}", centered_pos);
                 native_options.initial_window_pos = Some(Pos2 {
-                    x: centered_pos.width as f32,
-                    y: centered_pos.height as f32,
+                    x: centered_pos.width,
+                    y: centered_pos.height,
                 });
                 println!("3: {:?}", native_options.initial_window_pos);
                 break;
@@ -238,16 +238,22 @@ pub fn run_wgpu(
         }
 
         for ele in event_loop.available_monitors() {
-            let mut monitor_center = ele.size();
-            monitor_center.height /= 2;
-            monitor_center.width /= 2;
-            monitor_center.width -= native_options.initial_window_size.unwrap().x as u32;
-            monitor_center.height -= native_options.initial_window_size.unwrap().y as u32;
-            native_options.initial_window_pos = Some(Pos2 {
-                x: monitor_center.width as f32,
-                y: monitor_center.height as f32,
-            });
-            break;
+            let centered_pos = ele.size().to_logical::<f32>(ele.scale_factor());
+            let is_not_web = centered_pos.width != 0 && centered_pos.height != 0;
+            if is_not_web {
+                centered_pos.height /= 2.;
+                centered_pos.width /= 2.;
+                println!("1: {:?}", centered_pos);
+                centered_pos.width -= native_options.initial_window_size.unwrap().x;
+                centered_pos.height -= native_options.initial_window_size.unwrap().y;
+                println!("2: {:?}", centered_pos);
+                native_options.initial_window_pos = Some(Pos2 {
+                    x: centered_pos.width,
+                    y: centered_pos.height,
+                });
+                println!("3: {:?}", native_options.initial_window_pos);
+                break;
+            }
         }
     }
 
