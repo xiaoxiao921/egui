@@ -1,5 +1,6 @@
 use super::epi_integration;
 use crate::epi;
+use egui::Pos2;
 use egui_winit::winit;
 
 struct RequestRepaintEvent;
@@ -57,10 +58,10 @@ pub fn run_glow(
                 monitor_center.width -= native_options.initial_window_pos.unwrap().x as u32;
                 monitor_center.height -= native_options.initial_window_pos.unwrap().y as u32;
             }
-            native_options.initial_window_pos = Pos2 {
+            native_options.initial_window_pos = Some(Pos2 {
                 x: monitor_center.width as f32,
                 y: monitor_center.height as f32,
-            };
+            });
             break;
         }
     }
