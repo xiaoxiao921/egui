@@ -57,7 +57,7 @@ pub fn run_glow(
 
         for ele in event_loop.available_monitors() {
             let centered_pos = ele.size().to_logical::<f32>(ele.scale_factor());
-            let is_not_web = centered_pos.width != 0 && centered_pos.height != 0;
+            let is_not_web = centered_pos.width != 0.0 && centered_pos.height != 0.0;
             if is_not_web {
                 centered_pos.height /= 2.;
                 centered_pos.width /= 2.;
