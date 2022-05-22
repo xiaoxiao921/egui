@@ -42,7 +42,7 @@ pub use epi::NativeOptions;
 #[cfg(feature = "glow")]
 pub fn run_glow(
     app_name: &str,
-    native_options: &epi::NativeOptions,
+    native_options: &mut epi::NativeOptions,
     app_creator: epi::AppCreator,
 ) -> ! {
     let storage = epi_integration::create_storage(app_name);
@@ -216,7 +216,7 @@ pub fn run_glow(
 #[cfg(feature = "wgpu")]
 pub fn run_wgpu(
     app_name: &str,
-    native_options: &epi::NativeOptions,
+    native_options: &mut epi::NativeOptions,
     app_creator: epi::AppCreator,
 ) -> ! {
     let storage = epi_integration::create_storage(app_name);
@@ -232,10 +232,10 @@ pub fn run_wgpu(
                 monitor_center.width -= native_options.initial_window_pos.unwrap().x as u32;
                 monitor_center.height -= native_options.initial_window_pos.unwrap().y as u32;
             }
-            native_options.initial_window_pos = Pos2 {
+            native_options.initial_window_pos = Some(Pos2 {
                 x: monitor_center.width as f32,
                 y: monitor_center.height as f32,
-            };
+            });
             break;
         }
     }
