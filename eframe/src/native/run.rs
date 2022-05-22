@@ -61,16 +61,12 @@ pub fn run_glow(
             if is_not_web {
                 centered_pos.height /= 2.;
                 centered_pos.width /= 2.;
-                println!("scale factor : {:?}", ele.scale_factor());
-                println!("1: {:?}", centered_pos);
                 centered_pos.width -= native_options.initial_window_size.unwrap().x / 2.;
                 centered_pos.height -= native_options.initial_window_size.unwrap().y / 2.;
-                println!("2: {:?}", centered_pos);
                 native_options.initial_window_pos = Some(Pos2 {
                     x: centered_pos.width,
                     y: centered_pos.height,
                 });
-                println!("3: {:?}", native_options.initial_window_pos);
                 break;
             }
         }
@@ -239,20 +235,17 @@ pub fn run_wgpu(
         }
 
         for ele in event_loop.available_monitors() {
-            let centered_pos = ele.size().to_logical::<f32>(ele.scale_factor());
-            let is_not_web = centered_pos.width != 0 && centered_pos.height != 0;
+            let mut centered_pos = ele.size().to_logical::<f32>(ele.scale_factor());
+            let is_not_web = centered_pos.width != 0.0 && centered_pos.height != 0.0;
             if is_not_web {
                 centered_pos.height /= 2.;
                 centered_pos.width /= 2.;
-                println!("1: {:?}", centered_pos);
-                centered_pos.width -= native_options.initial_window_size.unwrap().x;
-                centered_pos.height -= native_options.initial_window_size.unwrap().y;
-                println!("2: {:?}", centered_pos);
+                centered_pos.width -= native_options.initial_window_size.unwrap().x / 2.;
+                centered_pos.height -= native_options.initial_window_size.unwrap().y / 2.;
                 native_options.initial_window_pos = Some(Pos2 {
                     x: centered_pos.width,
                     y: centered_pos.height,
                 });
-                println!("3: {:?}", native_options.initial_window_pos);
                 break;
             }
         }
