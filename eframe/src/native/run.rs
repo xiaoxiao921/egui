@@ -1,6 +1,7 @@
 use super::epi_integration;
 use crate::epi;
 use egui::Pos2;
+use egui::Vec2;
 use egui_winit::winit;
 
 struct RequestRepaintEvent;
@@ -50,14 +51,16 @@ pub fn run_glow(
     let event_loop = winit::event_loop::EventLoop::with_user_event();
 
     if window_settings.is_none() && native_options.initial_window_pos_centered {
+        if native_options.initial_window_size.is_none() {
+            native_options.initial_window_size = Some(Vec2::new(800., 600.));
+        }
+
         for ele in event_loop.available_monitors() {
             let mut monitor_center = ele.size();
             monitor_center.height /= 2;
             monitor_center.width /= 2;
-            if native_options.initial_window_pos.is_some() {
-                monitor_center.width -= native_options.initial_window_pos.unwrap().x as u32;
-                monitor_center.height -= native_options.initial_window_pos.unwrap().y as u32;
-            }
+            monitor_center.width -= native_options.initial_window_size.unwrap().x as u32;
+            monitor_center.height -= native_options.initial_window_size.unwrap().y as u32;
             native_options.initial_window_pos = Some(Pos2 {
                 x: monitor_center.width as f32,
                 y: monitor_center.height as f32,
@@ -224,14 +227,16 @@ pub fn run_wgpu(
     let event_loop = winit::event_loop::EventLoop::with_user_event();
 
     if window_settings.is_none() && native_options.initial_window_pos_centered {
+        if native_options.initial_window_size.is_none() {
+            native_options.initial_window_size = Some(Vec2::new(800., 600.));
+        }
+
         for ele in event_loop.available_monitors() {
             let mut monitor_center = ele.size();
             monitor_center.height /= 2;
             monitor_center.width /= 2;
-            if native_options.initial_window_pos.is_some() {
-                monitor_center.width -= native_options.initial_window_pos.unwrap().x as u32;
-                monitor_center.height -= native_options.initial_window_pos.unwrap().y as u32;
-            }
+            monitor_center.width -= native_options.initial_window_size.unwrap().x as u32;
+            monitor_center.height -= native_options.initial_window_size.unwrap().y as u32;
             native_options.initial_window_pos = Some(Pos2 {
                 x: monitor_center.width as f32,
                 y: monitor_center.height as f32,
