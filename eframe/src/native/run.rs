@@ -48,6 +48,14 @@ pub fn run_glow(
     let window_settings = epi_integration::load_window_settings(storage.as_deref());
     let event_loop = winit::event_loop::EventLoop::with_user_event();
 
+    if native_options.initial_window_pos_centered {
+        for ele in event_loop.available_monitors() {
+            native_options.initial_window_pos =
+                ele.size() / 2. - native_options.initial_window_size;
+            break;
+        }
+    }
+
     let window_builder =
         epi_integration::window_builder(native_options, &window_settings).with_title(app_name);
     let (gl_window, gl) = create_display(native_options, window_builder, &event_loop);
@@ -204,6 +212,14 @@ pub fn run_wgpu(
     let storage = epi_integration::create_storage(app_name);
     let window_settings = epi_integration::load_window_settings(storage.as_deref());
     let event_loop = winit::event_loop::EventLoop::with_user_event();
+
+    if native_options.initial_window_pos_centered {
+        for ele in event_loop.available_monitors() {
+            native_options.initial_window_pos =
+                ele.size() / 2. - native_options.initial_window_size;
+            break;
+        }
+    }
 
     let window = epi_integration::window_builder(native_options, &window_settings)
         .with_title(app_name)

@@ -165,6 +165,8 @@ pub struct NativeOptions {
     /// The application icon, e.g. in the Windows task bar etc.
     pub icon_data: Option<IconData>,
 
+    pub initial_window_pos_centered: bool,
+
     /// The initial (inner) position of the native window in points (logical pixels).
     pub initial_window_pos: Option<egui::Pos2>,
 
@@ -234,6 +236,7 @@ impl Default for NativeOptions {
             depth_buffer: 0,
             stencil_buffer: 0,
             renderer: Renderer::default(),
+            initial_window_pos_centered: false,
         }
     }
 }
