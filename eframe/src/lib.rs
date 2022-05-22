@@ -144,7 +144,7 @@ mod native;
 /// ```
 #[cfg(not(target_arch = "wasm32"))]
 #[allow(clippy::needless_pass_by_value)]
-pub fn run_native(app_name: &str, native_options: NativeOptions, app_creator: AppCreator) -> ! {
+pub fn run_native(app_name: &str, mut native_options: NativeOptions, app_creator: AppCreator) -> ! {
     let renderer = native_options.renderer;
 
     match renderer {
