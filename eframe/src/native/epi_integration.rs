@@ -57,6 +57,7 @@ pub fn window_builder(
         stencil_buffer: _, // used in `fn create_display`
         renderer: _,       // used in `fn run_native`
         initial_window_pos_centered,
+        window_title,
     } = native_options;
 
     let window_icon = icon_data.clone().and_then(load_icon);
