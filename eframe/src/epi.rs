@@ -239,6 +239,7 @@ impl Default for NativeOptions {
             stencil_buffer: 0,
             renderer: Renderer::default(),
             initial_window_pos_centered: false,
+            window_title: None,
         }
     }
 }
