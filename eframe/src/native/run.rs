@@ -74,7 +74,7 @@ pub fn run_glow(
 
     let window_builder = epi_integration::window_builder(native_options, &window_settings)
         .with_title(if native_options.window_title.is_some() {
-            native_options.window_title.unwrap().to_string()
+            native_options.window_title.as_ref().unwrap().to_string()
         } else {
             app_name.to_string()
         });
