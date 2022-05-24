@@ -72,8 +72,12 @@ pub fn run_glow(
         }
     }
 
-    let window_builder =
-        epi_integration::window_builder(native_options, &window_settings).with_title(app_name);
+    let window_builder = epi_integration::window_builder(native_options, &window_settings)
+        .with_title(if native_options.window_title.is_some() {
+            native_options.window_title.unwrap()
+        } else {
+            app_name
+        });
     let (gl_window, gl) = create_display(native_options, window_builder, &event_loop);
     let gl = std::rc::Rc::new(gl);
 

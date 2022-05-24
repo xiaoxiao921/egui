@@ -167,6 +167,8 @@ pub struct NativeOptions {
 
     pub initial_window_pos_centered: bool,
 
+    pub window_title: Option<String>,
+
     /// The initial (inner) position of the native window in points (logical pixels).
     pub initial_window_pos: Option<egui::Pos2>,
 
