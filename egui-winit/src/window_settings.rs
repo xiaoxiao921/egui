@@ -1,3 +1,4 @@
+#[cfg(windows)]
 use winapi::{shared::windef::POINT, um::winuser};
 
 /// Can be used to store native window settings (position and size).
@@ -27,6 +28,7 @@ impl WindowSettings {
         }
     }
 
+    #[cfg(windows)]
     pub fn initialize_window(
         &self,
         mut window: winit::window::WindowBuilder,
@@ -59,6 +61,34 @@ impl WindowSettings {
                     y: pos.y as f64,
                 });
             }
+        }
+
+        if let Some(inner_size_points) = self.inner_size_points {
+            window.with_inner_size(winit::dpi::LogicalSize {
+                width: inner_size_points.x as f64,
+                height: inner_size_points.y as f64,
+            })
+        } else {
+            window
+        }
+    }
+
+    #[cfg(not(windows))]
+    pub fn initialize_window(
+        &self,
+        mut window: winit::window::WindowBuilder,
+    ) -> winit::window::WindowBuilder {
+        // If the app last ran on two monitors and only one is now connected, then
+        // the given position is invalid.
+        // If this happens on Mac, the window is clamped into valid area.
+        // If this happens on Windows, the window is hidden and very difficult to find:
+        // Check with winapi MonitorFromPoint if its outside of any screen
+
+        if let Some(pos) = self.inner_pos {
+            window = window.with_position(winit::dpi::PhysicalPosition {
+                x: pos.x as f64,
+                y: pos.y as f64,
+            });
         }
 
         if let Some(inner_size_points) = self.inner_size_points {
