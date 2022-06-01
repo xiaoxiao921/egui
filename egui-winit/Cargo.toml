@@ -47,6 +47,8 @@ egui = { version = "0.18.0", path = "../egui", default-features = false, feature
 instant = { version = "0.1", features = ["wasm-bindgen"] } # We use instant so we can (maybe) compile for web
 tracing = "0.1"
 winit = "0.26.1"
+
+[target.'cfg(windows)'.dependencies]
 winapi = "0.3.9"
 
 
