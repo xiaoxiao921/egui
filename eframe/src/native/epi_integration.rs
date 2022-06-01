@@ -1,5 +1,6 @@
 use crate::{epi, WindowInfo};
 use egui_winit::{native_pixels_per_point, WindowSettings};
+#[cfg(windows)]
 use winapi::{
     shared::windef::{HWND, HWND__},
     um::winuser,
@@ -315,6 +316,7 @@ impl EpiIntegration {
         }
     }
 
+    #[cfg(windows)]
     pub fn save(&mut self, _app: &mut dyn epi::App, _window: &winit::window::Window) {
         #[cfg(feature = "persistence")]
         if let Some(storage) = self.frame.storage_mut() {
@@ -332,6 +334,34 @@ impl EpiIntegration {
             }
 
             if _app.persist_native_window() && can_save_window_position {
+                crate::profile_scope!("native_window");
+                epi::set_value(
+                    storage,
+                    STORAGE_WINDOW_KEY,
+                    &WindowSettings::from_display(_window),
+                );
+            }
+            if _app.persist_egui_memory() {
+                crate::profile_scope!("egui_memory");
+                epi::set_value(storage, STORAGE_EGUI_MEMORY_KEY, &*self.egui_ctx.memory());
+            }
+            {
+                crate::profile_scope!("App::save");
+                _app.save(storage);
+            }
+
+            crate::profile_scope!("Storage::flush");
+            storage.flush();
+        }
+    }
+
+    #[cfg(not(windows))]
+    pub fn save(&mut self, _app: &mut dyn epi::App, _window: &winit::window::Window) {
+        #[cfg(feature = "persistence")]
+        if let Some(storage) = self.frame.storage_mut() {
+            crate::profile_function!();
+
+            if _app.persist_native_window() {
                 crate::profile_scope!("native_window");
                 epi::set_value(
                     storage,
