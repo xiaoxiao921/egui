@@ -2,13 +2,17 @@
 
 use eframe::egui;
 
-fn main() {
-    let options = eframe::NativeOptions::default();
+fn main() -> Result<(), eframe::Error> {
+    env_logger::init(); // Log to stderr (if you run with `RUST_LOG=debug`).
+    let options = eframe::NativeOptions {
+        initial_window_size: Some(egui::vec2(320.0, 240.0)),
+        ..Default::default()
+    };
     eframe::run_native(
         "egui example: custom font",
         options,
         Box::new(|cc| Box::new(MyApp::new(cc))),
-    );
+    )
 }
 
 fn setup_custom_fonts(ctx: &egui::Context) {
@@ -19,7 +23,9 @@ fn setup_custom_fonts(ctx: &egui::Context) {
     // .ttf and .otf files supported.
     fonts.font_data.insert(
         "my_font".to_owned(),
-        egui::FontData::from_static(include_bytes!("../../../epaint/fonts/Hack-Regular.ttf")),
+        egui::FontData::from_static(include_bytes!(
+            "../../../crates/epaint/fonts/Hack-Regular.ttf"
+        )),
     );
 
     // Put my font first (highest priority) for proportional text:

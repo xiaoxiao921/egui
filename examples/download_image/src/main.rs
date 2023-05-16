@@ -4,13 +4,14 @@ use eframe::egui;
 use egui_extras::RetainedImage;
 use poll_promise::Promise;
 
-fn main() {
+fn main() -> Result<(), eframe::Error> {
+    env_logger::init(); // Log to stderr (if you run with `RUST_LOG=debug`).
     let options = eframe::NativeOptions::default();
     eframe::run_native(
         "Download and show an image with eframe/egui",
         options,
-        Box::new(|_cc| Box::new(MyApp::default())),
-    );
+        Box::new(|_cc| Box::<MyApp>::default()),
+    )
 }
 
 #[derive(Default)]
@@ -41,7 +42,7 @@ impl eframe::App for MyApp {
                 ui.spinner(); // still loading
             }
             Some(Err(err)) => {
-                ui.colored_label(egui::Color32::RED, err); // something went wrong
+                ui.colored_label(ui.visuals().error_fg_color, err); // something went wrong
             }
             Some(Ok(image)) => {
                 image.show_max_size(ui, ui.available_size());
