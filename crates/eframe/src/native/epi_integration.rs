@@ -91,6 +91,7 @@ pub fn window_builder<E>(
         resizable,
         transparent,
         centered,
+        initial_centered,
         active,
         ..
     } = native_options;
@@ -148,21 +149,35 @@ pub fn window_builder<E>(
             window_builder = window_builder.with_inner_size(points_to_size(initial_window_size));
         }
 
+        if *initial_centered {
+            window_builder = center_window::<E>(event_loop, *initial_window_size, window_builder);
+        }
+
         *initial_window_size
     };
 
     if *centered {
-        if let Some(monitor) = event_loop.available_monitors().next() {
-            let monitor_size = monitor.size().to_logical::<f64>(monitor.scale_factor());
-            let inner_size = inner_size_points.unwrap_or(egui::Vec2 { x: 800.0, y: 600.0 });
-            if monitor_size.width > 0.0 && monitor_size.height > 0.0 {
-                let x = (monitor_size.width - inner_size.x as f64) / 2.0;
-                let y = (monitor_size.height - inner_size.y as f64) / 2.0;
-                window_builder = window_builder.with_position(winit::dpi::LogicalPosition { x, y });
-            }
-        }
+        window_builder = center_window::<E>(event_loop, inner_size_points, window_builder);
     }
     window_builder
+}
+
+fn center_window<E>(
+    event_loop: &EventLoopWindowTarget<E>,
+    inner_size_points: Option<egui::Vec2>,
+    window_builder: winit::window::WindowBuilder,
+) -> winit::window::WindowBuilder {
+    if let Some(monitor) = event_loop.available_monitors().next() {
+        let monitor_size = monitor.size().to_logical::<f64>(monitor.scale_factor());
+        let inner_size = inner_size_points.unwrap_or(egui::Vec2 { x: 800.0, y: 600.0 });
+        if monitor_size.width > 0.0 && monitor_size.height > 0.0 {
+            let x = (monitor_size.width - inner_size.x as f64) / 2.0;
+            let y = (monitor_size.height - inner_size.y as f64) / 2.0;
+            return window_builder.with_position(winit::dpi::LogicalPosition { x, y });
+        }
+    }
+
+    return window_builder;
 }
 
 pub fn apply_native_options_to_window(

@@ -380,6 +380,13 @@ pub struct NativeOptions {
     /// Wayland desktop currently not supported.
     pub centered: bool,
 
+    /// On desktop: make the window position to be centered at initialization if there is no existing persisted window position.
+    ///
+    /// Platform specific:
+    ///
+    /// Wayland desktop currently not supported.
+    pub initial_centered: bool,
+
     /// Configures wgpu instance/device/adapter/surface creation and renderloop.
     #[cfg(feature = "wgpu")]
     pub wgpu_options: egui_wgpu::WgpuConfiguration,
@@ -446,6 +453,7 @@ impl Default for NativeOptions {
             shader_version: None,
 
             centered: false,
+            initial_centered: false,
 
             #[cfg(feature = "wgpu")]
             wgpu_options: egui_wgpu::WgpuConfiguration::default(),
